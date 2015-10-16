@@ -92,7 +92,8 @@ plot(step_averages, type = &quot;l&quot;, xlab = &quot;5-minute interval&quot;, 
 <h2>Imputing missing values</h2>
 <pre class="r"><code>sum(is.na(df$steps))</code></pre>
 <pre><code>## [1] 2304</code></pre>
-<pre class="r"><code>temp &lt;- merge(df, step_averages, by = &quot;interval&quot;, suffixes = c(&quot;&quot;, &quot;.imputted&quot;))
+<pre class="r"><code>## Strategy is to replace NA by mean in 5 min interval
+temp &lt;- merge(df, step_averages, by = &quot;interval&quot;, suffixes = c(&quot;&quot;, &quot;.imputted&quot;))
 nas &lt;- is.na(temp$steps)
 temp$steps[nas] &lt;- temp$steps.imputted[nas]
 temp &lt;- temp[, c(1:3)]

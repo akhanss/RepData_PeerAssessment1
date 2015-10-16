@@ -22,6 +22,7 @@ median(df_steps$steps)
 
 ## What is the average daily activity pattern?
 ```{r}
+
 step_averages <- aggregate(steps ~ interval, data = df_activity, FUN = mean)
 plot(step_averages, type = "l", xlab = "5-minute interval", ylab = "Average number of steps taken")
 step_averages[which.max(step_averages$steps), ]
@@ -30,6 +31,7 @@ step_averages[which.max(step_averages$steps), ]
 ## Imputing missing values
 ```{r}
 sum(is.na(df$steps))
+
 
 ## Strategy is to replace NA by mean in 5 min interval
 temp <- merge(df, step_averages, by = "interval", suffixes = c("", ".imputted"))

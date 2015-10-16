@@ -15,7 +15,7 @@ df_steps <- aggregate(steps ~ date, df_activity, sum)
 hist(df_steps$steps, main = "Total number of steps taken each day",  xlab = "Steps")
 ```
 
-![](figure/unnamed-chunk-2-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
 
 ```r
 mean(df_steps$steps)
@@ -40,7 +40,7 @@ step_averages <- aggregate(steps ~ interval, data = df_activity, FUN = mean)
 plot(step_averages, type = "l", xlab = "5-minute interval", ylab = "Average number of steps taken")
 ```
 
-![](figure/unnamed-chunk-3-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
 
 ```r
 step_averages[which.max(step_averages$steps), ]
@@ -62,6 +62,7 @@ sum(is.na(df$steps))
 ```
 
 ```r
+## Strategy is to replace NA by mean in 5 min interval
 temp <- merge(df, step_averages, by = "interval", suffixes = c("", ".imputted"))
 nas <- is.na(temp$steps)
 temp$steps[nas] <- temp$steps.imputted[nas]
@@ -71,7 +72,7 @@ df_steps_imputted <- aggregate(steps ~ date, temp, sum)
 hist(df_steps_imputted$steps, main ="Total number of steps taken each day (Imputted)",  xlab = "Steps")
 ```
 
-![](figure/unnamed-chunk-4-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
 
 ```r
 mean(df_steps_imputted$steps)
@@ -104,4 +105,4 @@ library(lattice)
 xyplot(steps ~ interval | day_label, avg_steps, type = "l", layout = c(1, 2), xlab = "5-minute interval", ylab = "Average number of steps")
 ```
 
-![](figure/unnamed-chunk-5-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
