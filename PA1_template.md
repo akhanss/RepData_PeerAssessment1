@@ -1,37 +1,67 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
-```{r}
+
+```r
 df <- read.csv("activity.csv")
 df_activity <- df[!is.na(df$steps), ]
 ```
 
 ## What is mean total number of steps taken per day?
-```{r}
+
+```r
 df_steps <- aggregate(steps ~ date, df_activity, sum)
 hist(df_steps$steps, main = "Total number of steps taken each day",  xlab = "Steps")
+```
+
+![](figure/unnamed-chunk-2-1.png) 
+
+```r
 mean(df_steps$steps)
+```
+
+```
+## [1] 10766.19
+```
+
+```r
 median(df_steps$steps)
 ```
 
-## What is the average daily activity pattern?
-```{r}
+```
+## [1] 10765
+```
 
+## What is the average daily activity pattern?
+
+```r
 step_averages <- aggregate(steps ~ interval, data = df_activity, FUN = mean)
 plot(step_averages, type = "l", xlab = "5-minute interval", ylab = "Average number of steps taken")
+```
+
+![](figure/unnamed-chunk-3-1.png) 
+
+```r
 step_averages[which.max(step_averages$steps), ]
 ```
 
-## Imputing missing values
-```{r}
-sum(is.na(df$steps))
+```
+##     interval    steps
+## 104      835 206.1698
+```
 
+## Imputing missing values
+
+```r
+sum(is.na(df$steps))
+```
+
+```
+## [1] 2304
+```
+
+```r
 temp <- merge(df, step_averages, by = "interval", suffixes = c("", ".imputted"))
 nas <- is.na(temp$steps)
 temp$steps[nas] <- temp$steps.imputted[nas]
@@ -39,12 +69,29 @@ temp <- temp[, c(1:3)]
 
 df_steps_imputted <- aggregate(steps ~ date, temp, sum)
 hist(df_steps_imputted$steps, main ="Total number of steps taken each day (Imputted)",  xlab = "Steps")
+```
+
+![](figure/unnamed-chunk-4-1.png) 
+
+```r
 mean(df_steps_imputted$steps)
+```
+
+```
+## [1] 10766.19
+```
+
+```r
 median(df_steps_imputted$steps)
 ```
 
+```
+## [1] 10766.19
+```
+
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r}
+
+```r
 day <- function(date) {
     if (weekdays(as.Date(date)) %in% c("Saturday", "Sunday"))
         "weekend"
@@ -56,3 +103,5 @@ avg_steps <- aggregate(steps ~ interval + day_label, data = df_activity, mean)
 library(lattice)
 xyplot(steps ~ interval | day_label, avg_steps, type = "l", layout = c(1, 2), xlab = "5-minute interval", ylab = "Average number of steps")
 ```
+
+![](figure/unnamed-chunk-5-1.png) 
